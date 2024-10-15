@@ -1,24 +1,14 @@
-import signupUser from './4-user-promise.js';
-import uploadPhoto from './5-photo-reject.js';
+import signupUser from './4-user-promise';
+import uploadPhoto from './5-photo-reject';
 
-export default function handleProfileSignup(firstName, lastName, fileName){
+export default function handleProfileSignup(firstName, lastName, fileName) {
+  return Promise.all([
+    signupUser(firstName, lastName)
 
-    const signupUserPromise = signupUser(firstName, lastName);
-    const uploadPhotoPromise = uploadPhoto(fileName);
-
-    Promise.allSettled([signupUserPromise])
-    .then(() => {
-        return [
-            {
-                status: signupUserPromise.status,
-                value: signupUserPromise.value,
-            },
-
-            {
-                status: uploadPhotoPromise.status,
-                value: uploadPhotoPromise.value,
-            },
-        ]
-    })
-    .catch(new Error());
+      .then((user) => ({ status: 'fulfilled', value: user }))
+      .catch((error) => ({ status: 'rejected', value: error })),
+    uploadPhoto(fileName)
+      .then((photo) => ({ status: 'fulfilled', value: photo }))
+      .catch((error) => ({ status: 'rejected', value: error })),
+  ]);
 }
