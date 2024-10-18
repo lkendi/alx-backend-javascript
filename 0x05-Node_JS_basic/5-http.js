@@ -15,10 +15,11 @@ const app = http.createServer((req, res) => {
     res.write('This is the list of our students\n');
 
     countStudents(databasePath)
-      .then(() => {
-        res.end();
+      .then((studentList) => {
+        res.end(studentList);
       })
       .catch((error) => {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
         res.end(error.message);
       });
   } else {

@@ -4,35 +4,38 @@ function countStudents(path) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, 'utf-8', (err, data) => {
       if (err) {
-        reject(new Error('Cannot load the database'));
-      } else {
-        const lines = data.split('\n').filter((line) => line.trim() !== '');
+        return reject(new Error('Cannot load the database'));
+      }
 
-        if (lines.length > 1) {
-          console.log(`Number of students: ${lines.length - 1}`);
+      const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-          const studentsCount = {};
+      // Check if there are no students
+      if (lines.length <= 1) {
+        return resolve('No students found\n');
+      }
 
-          for (let i = 1; i < lines.length; i += 1) {
-            const studentData = lines[i].split(',');
-            const firstName = studentData[0];
-            const field = studentData[3];
+      let result = `Number of students: ${lines.length - 1}\n`;
+      const studentsCount = {};
 
-            if (!studentsCount[field]) {
-              studentsCount[field] = [];
-            }
+      for (let i = 1; i < lines.length; i += 1) {
+        const studentData = lines[i].split(',');
+        const firstName = studentData[0];
+        const field = studentData[3];
 
-            studentsCount[field].push(firstName);
-          }
+        if (!studentsCount[field]) {
+          studentsCount[field] = [];
+        }
 
-          for (const field in studentsCount) {
-            if (studentsCount.hasOwnProperty(field)) {
-              console.log(`Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}`);
-            }
-          }
-          resolve();
+        studentsCount[field].push(firstName);
+      }
+
+      for (const field in studentsCount) {
+        if (Object.prototype.hasOwnProperty.call(studentsCount, field)) {
+          result += `Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}\n`;
         }
       }
+
+      resolve(result);
     });
   });
 }

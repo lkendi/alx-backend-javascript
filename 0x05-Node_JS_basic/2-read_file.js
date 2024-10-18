@@ -1,6 +1,14 @@
 const fs = require('fs');
 
-function countStudents(path) {
+/** ***********  ✨ Codeium Command ⭐  ************ */
+/**
+ * @function countStudents
+ * @description Given a path to a file, logs the total number of students and the number
+ * of students in each field.
+ * @param {string} path - The path to the file.
+ * @throws {Error} If the file cannot be read.
+ */
+/** ****  995ca27a-8333-4c30-aede-fd2439431656  ****** */function countStudents(path) {
   try {
     const data = fs.readFileSync(path, 'utf-8');
     const lines = data.split('\n').filter((line) => line.trim() !== '');
@@ -23,7 +31,7 @@ function countStudents(path) {
       }
 
       for (const field in studentsCount) {
-        if (studentsCount.hasOwnProperty(field)) {
+        if (Object.prototype.hasOwnProperty.call(studentsCount, field)) {
           console.log(`Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}`);
         }
       }
