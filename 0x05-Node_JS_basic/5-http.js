@@ -58,7 +58,7 @@ const app = http.createServer((req, res) => {
     const databasePath = process.argv[2];
 
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.write('This is the list of our students');
+    res.write('This is the list of our students\n');
 
     countStudents(databasePath)
       .then((studentList) => {
@@ -66,7 +66,7 @@ const app = http.createServer((req, res) => {
       })
       .catch(() => {
         res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('\nCannot load the database'); // Ensured no extra newline before error message
+        res.end('This is the list of our students\nCannot load the database');
       });
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
