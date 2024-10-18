@@ -9,12 +9,11 @@ app.get('/', (req, res) => {
 
 app.get('/students', (req, res) => {
   const databasePath = process.argv[2];
-
   res.write('This is the list of our students\n');
 
   countStudents(databasePath)
     .then((data) => {
-      res.send(data);
+      res.end(data);
     })
     .catch(() => {
       res.status(500).send('Cannot load the database');
