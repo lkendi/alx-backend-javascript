@@ -15,6 +15,7 @@ function countStudents(path) {
       }
 
       let result = `Number of students: ${lines.length - 1}\n`;
+      console.log(result.trim());
       const studentsCount = {};
 
       for (let i = 1; i < lines.length; i += 1) {
@@ -31,8 +32,9 @@ function countStudents(path) {
 
       for (const field in studentsCount) {
         if (Object.prototype.hasOwnProperty.call(studentsCount, field)) {
-          result += `Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}\n`;
-          console.log(`Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}`);
+          const count = studentsCount[field].length;
+          result += `Number of students in ${field}: ${count}. List: ${studentsCount[field].join(', ')}\n`;
+          console.log(`Number of students in ${field}: ${count}. List: ${studentsCount[field].join(', ')}`);
         }
       }
 
