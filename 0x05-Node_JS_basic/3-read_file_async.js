@@ -9,8 +9,8 @@ function countStudents(path) {
 
       const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-      // Check if there are no students
       if (lines.length <= 1) {
+        console.log('No students found');
         return resolve('No students found\n');
       }
 
@@ -32,10 +32,11 @@ function countStudents(path) {
       for (const field in studentsCount) {
         if (Object.prototype.hasOwnProperty.call(studentsCount, field)) {
           result += `Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}\n`;
+          console.log(`Number of students in ${field}: ${studentsCount[field].length}. List: ${studentsCount[field].join(', ')}`);
         }
       }
 
-      resolve(result);
+      return resolve(result);
     });
   });
 }
