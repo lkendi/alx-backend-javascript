@@ -1,40 +1,21 @@
-const fs = require('fs');
+import fs from 'fs/promises';
 
-function readDatabase(path) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf-8', (err, data) => {
-      if (err) {
-        return reject(err);
-      }
+export const readDatabase = async (filePath) => {
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    const students = JSON.parse(data);
+    const result = {};
 
-      const lines = data.split('\n').filter((line) => line.trim() !== '');
-
-      if (lines.length <= 1) {
-        return resolve({});
-      }
-
-      const fields = lines[0].split(',').map(field => field.trim()); 
-      const result = {};
-
-      fields.forEach(field => {
+    for (const student of students) {
+      const field = student.field;
+      if (!result[field]) {
         result[field] = [];
-      });
-
-      for (const line of lines.slice(1)) {
-        const studentData = line.split(',').map(item => item.trim()); 
-        const firstName = studentData[0];
-        const field = studentData[1];
-
-        if (result[field]) {
-          result[field].push(firstName);
-        } else {
-          console.warn(`Field ${field} not recognized. Skipping student ${firstName}.`);
-        }
       }
+      result[field].push(student.firstname);
+    }
 
-      resolve(result);
-    });
-  });
-}
-
-module.exports = readDatabase;
+    return result;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
