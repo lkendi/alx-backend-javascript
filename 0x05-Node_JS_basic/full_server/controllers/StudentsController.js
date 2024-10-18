@@ -1,4 +1,4 @@
-import { readDatabase } from '../utils';
+import readDatabase from '../utils';
 
 export default class StudentsController {
   static getAllStudents(req, res) {
@@ -13,7 +13,7 @@ export default class StudentsController {
           });
         res.status(200).send(responseText.trim());
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).send('Cannot load the database');
       });
   }
@@ -26,13 +26,11 @@ export default class StudentsController {
     }
 
     const databaseFile = process.argv[2];
-    readDatabase(databaseFile)
+    return readDatabase(databaseFile)
       .then((students) => {
         const studentsInMajor = students[major] || [];
-        res.status(200).send(`List: ${studentsInMajor.join(', ')}`);
+        return res.status(200).send(`List: ${studentsInMajor.join(', ')}`);
       })
-      .catch(() => {
-        res.status(500).send('Cannot load the database');
-      });
+      .catch(() => res.status(500).send('Cannot load the database'));
   }
 }
