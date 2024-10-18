@@ -1,21 +1,25 @@
-import fs from 'fs/promises';
+import fs from 'fs';
 
-export const readDatabase = async (filePath) => {
-  try {
-    const data = await fs.readFile(filePath, 'utf8');
-    const students = JSON.parse(data);
-    const result = {};
+export function readDatabase(filePath) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                reject(new Error('Cannot load the database'));
+                return;
+            }
 
-    for (const student of students) {
-      const field = student.field;
-      if (!result[field]) {
-        result[field] = [];
-      }
-      result[field].push(student.firstname);
-    }
+            const students = {};
+            const lines = data.trim().split('\n').slice(1); 
 
-    return result;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
+            lines.forEach(line => {
+                const [firstname, lastname, age, field] = line.split(','); 
+                if (!students[field]) {
+                    students[field] = [];
+                }
+                students[field].push(firstname);
+            });
+
+            resolve(students);
+        });
+    });
+}
