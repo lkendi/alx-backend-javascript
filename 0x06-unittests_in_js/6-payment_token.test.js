@@ -10,4 +10,14 @@ describe('getPaymentTokenFromAPI', () => {
       })
       .catch((error) => done(error));
   }));
+  it('should reject with an error when success is false', () => new Promise((done) => {
+    getPaymentTokenFromAPI(false)
+      .then(() => {
+        done(new Error('Expected method to reject.'));
+      })
+      .catch((error) => {
+        expect(error).to.be.an('error');
+        done();
+      });
+  }));
 });
