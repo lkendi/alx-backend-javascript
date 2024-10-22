@@ -1,8 +1,9 @@
 const request = require('request');
-const { expect } = require('chai');
-const app = require('./api');
+const { expect } = require("chai");
 
-describe('index page', () => {
+let server;
+
+describe('index page tests', () => {
   it('should return status code 200', () => new Promise((done) => {
     request('http://localhost:7865', (error, response, body) => {
       expect(response.statusCode).to.equal(200);
